@@ -19,17 +19,16 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      # Вот тут магия: если пуш в main — ссылка ведет на домен, если в test — на гитхабовский адрес
-      url: ${{ github.ref_name == 'main' && 'https://studhub-io.ru' || format('https://github.io{0}', github.event.repository.name) }}
+      url: ${{ github.ref_name == 'main' && 'https://studhub-io.ru' || format('https://studhubdevelopers.github.io/{0}', github.event.repository.name) }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Pages
-        uses: actions/pages-github-pages-config@v3
+        uses: actions/configure-pages@v5
 
-      # ШАГ ДЛЯ MAIN: Создаем файл CNAME только для продакшена
+      # ЕСЛИ ЭТО ВЕТКА MAIN: создаем файл CNAME для привязки домена
       - name: Create CNAME for production
         if: github.ref_name == 'main'
         run: echo "studhub-io.ru" > ./CNAME
@@ -37,7 +36,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.' # Папка с вашим скомпилированным сайтом или корнем проекта
+          path: '.' 
 
       - name: Deploy to GitHub Pages
         id: deployment
