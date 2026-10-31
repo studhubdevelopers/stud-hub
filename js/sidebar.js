@@ -106,7 +106,7 @@ async function sbLoad() {
     let rows = null;
     const viaFn = await sb.rpc('chat_get_profiles', { ids: missing });          // функция из supabase/chat.sql
     if (!viaFn.error) rows = viaFn.data;
-    else { const v = await sb.from('public_profiles').select('id,name,username,subtitle,bio,city,campus,interests,avatar_url,created_at').in('id', missing); rows = v.data; }
+    else { const v = await sb.from('public_profiles').select('id,name,username,subtitle,bio,city,campus,interests,avatar_url,cover_url,created_at').in('id', missing); rows = v.data; }
     (rows || []).forEach(r => known.set(r.id, sbPeerFromRow(r)));
   }
   const keep = sbPeers.filter(p => !threads[p.id]);            // найденные через поиск, но без переписки
@@ -144,7 +144,7 @@ async function sbRefreshBlock() {
 // Поиск профилей: пустой запрос — новые пользователи, иначе по имени или @нику. Ошибки не скрываем.
 async function sbFindProfiles(q, limit) {
   const clean = String(q || '').trim().replace(/^@/, '').replace(/[%_\\]/g, '');
-  const sel = 'id,name,username,subtitle,avatar_url,created_at';
+  const sel = 'id,name,username,subtitle,avatar_url,cover_url,created_at';
   try {
     // 1) серверная функция из chat.sql — самый надёжный путь
     const r = await sb.rpc('chat_find_profiles', { q: clean, lim: limit || 8 });

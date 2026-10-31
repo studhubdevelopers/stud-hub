@@ -1,5 +1,5 @@
 
-const VERSION = 'studhub-v18';
+const VERSION = 'studhub-v19';
 
 const SHELL = [
   './',
@@ -39,6 +39,7 @@ const SHELL = [
   './js/sidebar.js',
   './js/config.js',
   './js/backend.js',
+  './js/image-editor.js',
   './js/mobile.js',
   './js/main.js'
 ];

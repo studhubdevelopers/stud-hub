@@ -15,6 +15,8 @@
   --accent-hover: color-mix(in srgb, var(--accent) 85%, #000);
   --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--surface));
   --accent-soft-2: color-mix(in srgb, var(--accent) 24%, var(--surface));
+  --avatar-glyph-color: #24313d;
+  --avatar-chip-bg: #e9eef2;
   color-scheme: light;
 }
 :root[data-theme="dark"] {
@@ -28,6 +30,8 @@
   --text-2: #b4bcc7;
   --muted: #8b95a3;
   --muted-2: #6f7a89;
+  --avatar-glyph-color: #f0f4f8;
+  --avatar-chip-bg: #303a46;
   color-scheme: dark;
 }
 input, textarea, select { color: var(--text); }
@@ -37,3 +41,12 @@ input::placeholder, textarea::placeholder { color: var(--muted-2); }
 :root[data-theme="dark"] .toast.success { background: var(--accent); }
 :root[data-theme="dark"] .toast.error { background: #e74c3c; }
 :root[data-theme="dark"] .tab-btn.active { background: var(--accent); color: #fff; }
+
+/* Цвет букв и знаков в аватарах/значках адаптируется к выбранной теме. */
+.user-avatar, .profile-avatar-large, .community-card-icon, .cover-logo { color: var(--avatar-glyph-color); }
+:root[data-theme="dark"] .community-card-icon.i1,
+:root[data-theme="dark"] .community-card-icon.i2,
+:root[data-theme="dark"] .community-card-icon.i3,
+:root[data-theme="dark"] .community-card-icon.i4,
+:root[data-theme="dark"] .community-card-icon.i5,
+:root[data-theme="dark"] .community-card-icon.i6 { background: var(--avatar-chip-bg); color: var(--avatar-glyph-color); }

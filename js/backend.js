@@ -110,6 +110,7 @@ async function backendSavePublicProfile(user, avatarFile = null) {
     const uid = activeUserId();
     if (!uid) return { error: new Error('not_authenticated') };
     const fields = { name: String(user.name || 'Студент').slice(0, 40), username: String(user.username || '').toLowerCase(), subtitle: String(user.subtitle || '').slice(0, 120), bio: String(user.bio || '').slice(0, 1000), city: String(user.city || '').slice(0, 100), campus: String(user.campus || '').slice(0, 80), interests: String(user.interests || '').slice(0, 500) };
+    if (user.cover_url) fields.cover_url = String(user.cover_url);
     if (avatarFile) {
       if (!avatarFile.type || !/^image\/(png|jpeg|webp|gif)$/.test(avatarFile.type)) return { error: new Error('Поддерживаются PNG, JPG, WEBP и GIF') };
       if (avatarFile.size > 2 * 1024 * 1024) return { error: new Error('Аватар должен быть не больше 2 МБ') };
@@ -125,13 +126,63 @@ async function backendSavePublicProfile(user, avatarFile = null) {
     return { ok: true, avatar_url: fields.avatar_url || user.avatar_url || null };
   } catch (error) { return { error }; }
 }
+
+// Кроппер передаёт уже подготовленный JPEG. Изображения профиля и сообществ
+// сохраняются раздельно, чтобы не затрагивать существующую аватарку при смене обложки.
+async function backendUploadProfileImage(kind, file) {
+  try {
+    const uid = activeUserId();
+    if (!uid) return { error: new Error('not_authenticated') };
+    if (!['avatar', 'cover'].includes(kind)) return { error: new Error('Некорректный тип изображения') };
+    if (!file || file.type !== 'image/jpeg' || file.size > 2 * 1024 * 1024) return { error: new Error('Изображение должно быть JPEG размером до 2 МБ') };
+    const path = `${uid}/${kind}.jpg`;
+    const storage = need().storage.from('avatars');
+    const { error: uploadError } = await storage.upload(path, file, { upsert: true, contentType: file.type, cacheControl: '3600' });
+    if (uploadError) return { error: uploadError };
+    const { data } = storage.getPublicUrl(path);
+    const url = data.publicUrl + (data.publicUrl.includes('?') ? '&' : '?') + 'v=' + Date.now();
+    const field = kind === 'avatar' ? 'avatar_url' : 'cover_url';
+    const { error: updateError } = await need().from('profiles').update({ [field]: url }).eq('id', uid);
+    if (updateError) return { error: updateError };
+    return { ok: true, url };
+  } catch (error) { return { error }; }
+}
+
+async function backendLoadCommunityAppearance() {
+  try {
+    const { data, error } = await need().from('community_appearance').select('community_id,avatar_url,cover_url');
+    if (error) return { error };
+    return { data: data || [] };
+  } catch (error) { return { error }; }
+}
+
+async function backendUploadCommunityImage(communityId, kind, file) {
+  try {
+    const uid = activeUserId();
+    if (!uid) return { error: new Error('not_authenticated') };
+    if (!['avatar', 'cover'].includes(kind)) return { error: new Error('Некорректный тип изображения') };
+    if (!file || file.type !== 'image/jpeg' || file.size > 2 * 1024 * 1024) return { error: new Error('Изображение должно быть JPEG размером до 2 МБ') };
+    const id = String(communityId || '').trim();
+    if (!/^[a-zA-Z0-9_-]{1,40}$/.test(id)) return { error: new Error('Некорректное сообщество') };
+    const path = `${uid}/${id}/${kind}.jpg`;
+    const storage = need().storage.from('community-assets');
+    const { error: uploadError } = await storage.upload(path, file, { upsert: true, contentType: file.type, cacheControl: '3600' });
+    if (uploadError) return { error: uploadError };
+    const { data } = storage.getPublicUrl(path);
+    const url = data.publicUrl + (data.publicUrl.includes('?') ? '&' : '?') + 'v=' + Date.now();
+    const field = kind === 'avatar' ? 'avatar_url' : 'cover_url';
+    const { error: saveError } = await need().from('community_appearance').upsert({ community_id: id, [field]: url, updated_by: uid }, { onConflict: 'community_id' });
+    if (saveError) return { error: saveError };
+    return { ok: true, url };
+  } catch (error) { return { error }; }
+}
 async function backendSearchProfiles(query) {
   const q = String(query || '').trim().replace(/^@/, '');
   if (!q || q.length < 2 || !BACKEND || !sb) return [];
   try {
     const viaFn = await need().rpc('chat_find_profiles', { q, lim: 8 });   // функция из supabase/chat.sql, не зависит от прав на public_profiles
     if (!viaFn.error) return viaFn.data || [];
-    const select = 'id,name,username,subtitle,bio,city,campus,interests,avatar_url,created_at';
+    const select = 'id,name,username,subtitle,bio,city,campus,interests,avatar_url,cover_url,created_at';
     const [byUsername, byName] = await Promise.all([
       ok(need().from('public_profiles').select(select).ilike('username', `%${q}%`).limit(8)),
       ok(need().from('public_profiles').select(select).ilike('name', `%${q}%`).limit(8)),
@@ -147,7 +198,7 @@ async function backendInit() {
   const c = STUDHUB_CONFIG;
   sb = supabase.createClient(c.supabaseUrl, c.supabaseAnonKey, { auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
   const { data } = await sb.auth.getSession();
-  if (data.session) { setLocalSession(data.session.user); await syncProfileFromDatabase(data.session.user); await loadAll(); } else clearLocalSession();
+  if (data.session) { setLocalSession(data.session.user); await syncProfileFromDatabase(data.session.user); await loadAll(); if (typeof loadCommunityAppearance === 'function') await loadCommunityAppearance(); } else clearLocalSession();
   sb.auth.onAuthStateChange((ev, s) => {
     if (ev === 'PASSWORD_RECOVERY') setTimeout(recoverPassword, 400);
     if (ev === 'SIGNED_OUT' && activeUserId()) { clearLocalSession(); location.reload(); }
@@ -157,7 +208,7 @@ async function backendInit() {
 }
 async function syncProfileFromDatabase(user) {
   try {
-    const profile = await ok(need().from('profiles').select('name, username, subtitle, bio, city, campus, interests, avatar_url').eq('id', user.id).single());
+    const profile = await ok(need().from('profiles').select('name, username, subtitle, bio, city, campus, interests, avatar_url, cover_url').eq('id', user.id).single());
     const current = getCurrentUser();
     // Переносим старую локальную Data URL-аватарку в Storage один раз, если в БД её ещё нет.
     if (!profile.avatar_url && typeof current.avatar === 'string' && current.avatar.startsWith('data:image/')) {

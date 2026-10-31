@@ -447,3 +447,55 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 .disc-thread-composer-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px}.disc-thread-composer-footer>span{font-size:10px;color:var(--muted);line-height:1.4}.disc-thread-composer-footer .btn-submit{display:flex;align-items:center;gap:8px;white-space:nowrap}.disc-thread-composer-footer .btn-submit span{font-size:16px}
 .disc-action.disc-open-thread{color:var(--accent);font-weight:650}
 @media(max-width:600px){.disc-thread-overlay{padding:0;align-items:flex-end}.disc-thread-modal{width:100%;max-width:none!important;max-height:94dvh;height:92dvh;border-radius:20px 20px 0 0}.disc-thread-modal-body{padding:17px 15px}.disc-thread-composer-wrap{padding:12px 12px calc(12px + env(safe-area-inset-bottom));gap:8px}.disc-thread-composer-avatar,.disc-thread-reply-avatar{width:31px;height:31px;flex-basis:31px}.disc-thread-composer{padding:9px}.disc-thread-composer textarea{font-size:16px;min-height:48px}.disc-thread-composer-footer{align-items:flex-end}.disc-thread-composer-footer>span{max-width:125px}.disc-thread-composer-footer .btn-submit{font-size:12px;padding:10px 12px}.disc-thread-topic h2{font-size:20px}.disc-thread-reply-content{padding:10px 11px}}
+
+
+/* Загрузка и обрезка изображений профиля и сообществ */
+.messenger-icon { border: 0; padding: 0; flex: 0 0 40px; }
+.profile-cover { background-size: cover; background-position: center; background-repeat: no-repeat; }
+.profile-cover.has-custom-cover::before { background: linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.12)); }
+.profile-avatar-wrap { position: relative; flex: 0 0 80px; margin-top: -40px; z-index: 3; }
+.profile-avatar-wrap .profile-avatar-large { margin-top: 0; }
+.profile-avatar-edit, .community-avatar-edit { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--surface); border-radius: 50%; background: var(--surface-3); color: var(--text-2); cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.18); }
+.profile-avatar-edit { position: absolute; right: -2px; bottom: 0; font-size: 14px; }
+.profile-avatar-edit:hover, .community-avatar-edit:hover { background: var(--accent-soft); color: var(--accent); }
+.community-avatar-edit { position: absolute; left: 88px; top: 48px; z-index: 4; font-size: 14px; }
+.community-card-cover.has-image { background-size: cover; background-position: center; background-repeat: no-repeat; }
+.community-card-icon.has-image, .cover-logo.has-image { background-size: cover; background-position: center; background-repeat: no-repeat; color: transparent; }
+.community-card-icon.has-image { background-color: transparent; }
+.cover-logo.has-image { border-color: rgba(255,255,255,.8); }
+.cover-edit, .cover-edit-btn { z-index: 5; }
+.image-crop-overlay { z-index: 1500; padding: 18px; }
+.image-crop-modal { width: min(650px, 100%); max-width: 650px; max-height: min(92dvh, 850px); display: flex; flex-direction: column; overflow: hidden; }
+.image-crop-modal .modal-body { overflow-y: auto; min-height: 0; }
+.image-crop-stage { width: min(100%, 560px); margin: 0 auto; position: relative; overflow: hidden; background: #10151b; border-radius: 12px; touch-action: none; cursor: grab; user-select: none; }
+.image-crop-stage:active { cursor: grabbing; }
+.image-crop-stage img { position: absolute; display: block; max-width: none !important; max-height: none !important; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+.image-crop-hint { color: var(--muted); font-size: 12px; line-height: 1.5; margin: 12px auto 16px; max-width: 560px; }
+.image-crop-zoom-label { display: block; font-size: 13px; font-weight: 650; margin: 0 auto 6px; max-width: 560px; }
+.image-crop-zoom { display: block; width: min(100%, 560px); accent-color: var(--accent); margin: 0 auto; }
+.image-crop-modal .modal-footer { flex-shrink: 0; }
+.image-crop-modal button:disabled { opacity: .55; cursor: wait; }
+:root[data-theme="dark"] .image-crop-stage { background: #080b0f; }
+@media(max-width:600px) {
+  .image-crop-overlay { padding: 10px; align-items: center; }
+  .image-crop-modal { max-height: 94dvh; border-radius: 16px; }
+  .image-crop-modal .modal-body { padding: 15px; }
+  .community-avatar-edit { left: 86px; top: 46px; }
+  .profile-avatar-wrap { flex-basis: 72px; }
+  .profile-avatar-wrap .profile-avatar-large { width: 72px; height: 72px; }
+}
+
+/* Контрастные символы-заглушки: тёмные в светлой теме и светлые в тёмной. */
+:root .user-avatar, :root .profile-avatar-large, :root .community-card-icon, :root .cover-logo { color: var(--avatar-glyph-color); }
+:root[data-theme="dark"] .community-card-icon.i1,
+:root[data-theme="dark"] .community-card-icon.i2,
+:root[data-theme="dark"] .community-card-icon.i3,
+:root[data-theme="dark"] .community-card-icon.i4,
+:root[data-theme="dark"] .community-card-icon.i5,
+:root[data-theme="dark"] .community-card-icon.i6 { background: var(--avatar-chip-bg); color: var(--avatar-glyph-color); }
+
+/* Фон заглушек аватаров и значков единообразно меняется вместе с темой. */
+:root .user-avatar,
+:root .profile-avatar-large,
+:root .community-card-icon:not(.has-image),
+:root .cover-logo:not(.has-image) { background-color: var(--avatar-chip-bg); }

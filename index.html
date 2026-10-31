@@ -50,7 +50,7 @@
 <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
 <span data-i18n="hdr.create">Создать проект</span>
 </button>
-<div class="header-icon sb-mobile-only" id="chatIcon" role="button" tabindex="0" aria-label="Чат" onclick="openChat()" onkeydown="if(event.key==='Enter')openChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
+<button type="button" class="header-icon messenger-icon" id="chatIcon" aria-label="Мессенджер" title="Мессенджер" onclick="openChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></button>
 <div class="header-icon" id="notifIcon" style="position:relative;">
 <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
 <span class="badge" id="notifBadge">3</span>
@@ -140,7 +140,7 @@
 </div>
 
 <div class="view" id="view-community">
-<div class="community-cover"><div class="community-cover-inner"><div class="cover-sky"></div><div class="cover-building"><div class="cover-building-text">КОЛЛЕДЖ ИНФОРМАЦИОННЫХ<br>ТЕХНОЛОГИЙ И СТРОИТЕЛЬСТВА<span>КИТиС · тел: +7 (4012) 91 61 06</span></div></div><div class="cover-welcome">Добро пожаловать!</div><div class="cover-logo">К</div><button class="cover-edit"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Изменить обложку</button></div></div>
+<div class="community-cover"><div class="community-cover-inner"><div class="cover-sky"></div><div class="cover-building"><div class="cover-building-text">КОЛЛЕДЖ ИНФОРМАЦИОННЫХ<br>ТЕХНОЛОГИЙ И СТРОИТЕЛЬСТВА<span>КИТиС · тел: +7 (4012) 91 61 06</span></div></div><div class="cover-welcome">Добро пожаловать!</div><div class="cover-logo">К</div><button type="button" class="community-avatar-edit" title="Изменить значок сообщества" aria-label="Изменить значок сообщества" onclick="startImageUpload('community-avatar')">📷</button><button type="button" class="cover-edit" onclick="startImageUpload('community-cover')"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Изменить обложку</button></div></div>
 <div class="community-info"><div class="community-info-top"><div class="community-title-section"><div class="community-name">КИТиС</div><div class="community-fullname">Колледж информационных технологий и строительства</div><div class="community-location"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Калининград, ул. Правая наб., 18б</div></div><div class="community-actions"><button class="btn-joined"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Вы участник</button><button class="btn-invite"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Пригласить друзей</button></div></div><div class="community-stats"><div class="community-stat"><span class="community-stat-num">1 284</span><span class="community-stat-label">участника</span></div><div class="community-stat"><span class="community-stat-num">86</span><span class="community-stat-label">онлайн</span></div><div class="community-stat-online"><span class="online-dot"></span><span style="font-size:13px;color:var(--muted);">Студенты, выпускники и друзья колледжа</span></div></div></div>
 <div style="background:var(--surface);border-radius:16px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.06);"><h2 class="section-title" style="margin-bottom:12px;">О колледже</h2><p style="font-size:14px;color:var(--text-2);line-height:1.6;margin-bottom:12px;">КИТиС — Колледж информационных технологий и строительства в Калининграде. Здесь обучаются будущие разработчики, ИТ-специалисты, дизайнеры и строители.</p><p style="font-size:14px;color:var(--text-2);line-height:1.6;">В этом сообществе собираются студенты и выпускники, обсуждают учёбу, делятся находками, ищут команды для проектов и просто общаются.</p></div>
 <div id="communityDetailPosts" style="margin-top:20px"></div>
@@ -251,11 +251,11 @@
 </div>
 
 <div class="view" id="view-profile">
-<div class="profile-cover"><div class="cover-demo">DEMO</div><button class="cover-edit-btn"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Изменить обложку</button></div>
+<div class="profile-cover"><div class="cover-demo">DEMO</div><button type="button" class="cover-edit-btn" onclick="startImageUpload('profile-cover')"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Изменить обложку</button></div>
 <div class="profile-info-section">
 <div class="profile-info-top">
 <div style="display:flex;align-items:flex-start;">
-<div class="profile-avatar-large" id="profileAvatarLarge">ДС</div>
+<div class="profile-avatar-wrap"><div class="profile-avatar-large" id="profileAvatarLarge">ДС</div><button type="button" class="profile-avatar-edit" title="Изменить аватар" aria-label="Изменить аватар" onclick="startImageUpload('profile-avatar')">📷</button></div>
 <div class="profile-details">
 <div class="profile-name-row"><div class="profile-name" id="profileName">Дмитрий С.</div></div>
 <div class="profile-subtitle" id="profileSubtitle">КИТиС · 1 курс · Калининград</div>
@@ -375,7 +375,7 @@
 <div class="modal">
 <div class="modal-header"><div class="modal-title">Редактировать профиль</div><button class="modal-close" onclick="closeEditProfileModal()">✕</button></div>
 <div class="modal-body">
-<div class="form-group"><label class="form-label">Аватар</label><input class="form-input" type="file" id="editProfileAvatar" accept="image/*"><div style="font-size:12px;color:var(--muted);margin-top:5px;">Загрузите изображение с устройства.</div></div>
+<div class="form-group"><label class="form-label">Аватар</label><button type="button" class="btn-cancel" onclick="startImageUpload('profile-avatar')">Выбрать фото и обрезать</button><div style="font-size:12px;color:var(--muted);margin-top:5px;">Фото можно переместить и приблизить перед сохранением.</div></div>
 <div class="form-group"><label class="form-label">Имя и фамилия</label><input class="form-input" id="editProfileName" placeholder="Ваше имя"></div>
 <div class="form-group"><label class="form-label">Подзаголовок</label><input class="form-input" id="editProfileSubtitle" placeholder="Например: КИТиС · 1 курс · Калининград"></div>
 <div class="form-group"><label class="form-label">О себе</label><textarea class="form-textarea" id="editProfileBio" placeholder="Расскажите о себе..."></textarea></div>
@@ -513,6 +513,22 @@
 <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('deleteAccModal')" data-i18n="common.cancel">Отмена</button><button class="btn-submit" style="background:#e74c3c" onclick="submitDeleteAccount()" data-i18n="set.acc.delete">Удалить аккаунт</button></div>
 </div></div>
 
+
+<!-- ОБРЕЗКА ФОТО ДЛЯ АВАТАРОВ И ОБЛОЖЕК -->
+<input type="file" id="imageUploadInput" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+<div class="modal-overlay image-crop-overlay" id="imageCropModal" onclick="if(event.target===this)closeImageCropModal()">
+  <div class="modal image-crop-modal" role="dialog" aria-modal="true" aria-labelledby="imageCropTitle">
+    <div class="modal-header"><div class="modal-title" id="imageCropTitle">Обрезать изображение</div><button type="button" class="modal-close" onclick="closeImageCropModal()" aria-label="Закрыть">✕</button></div>
+    <div class="modal-body">
+      <div class="image-crop-stage" id="imageCropStage"><img id="imageCropImage" alt="Предпросмотр обрезки" draggable="false"></div>
+      <p class="image-crop-hint">Перетаскивайте фото, чтобы выбрать область. Масштаб меняется ползунком ниже.</p>
+      <label class="image-crop-zoom-label" for="imageCropZoom">Масштаб</label>
+      <input type="range" id="imageCropZoom" min="1" max="4" step="0.01" value="1" class="image-crop-zoom">
+    </div>
+    <div class="modal-footer"><button type="button" class="btn-cancel" onclick="closeImageCropModal()">Отмена</button><button type="button" class="btn-submit" id="imageCropApply" onclick="applyImageCrop()">Обрезать и сохранить</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 
@@ -545,6 +561,7 @@
 <script src="js/search.js"></script>
 <script src="js/sidebar.js"></script>
 <script src="js/backend.js"></script>
+<script src="js/image-editor.js"></script>
 <script src="js/mobile.js"></script>
 <script src="js/main.js"></script>
 </body>
