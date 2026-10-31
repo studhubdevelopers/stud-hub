@@ -1,0 +1,44 @@
+name: Deploy StudHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - test
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      # Вот тут магия: если пуш в main — ссылка ведет на домен, если в test — на гитхабовский адрес
+      url: ${{ github.ref_name == 'main' && 'https://studhub-io.ru' || format('https://github.io{0}', github.event.repository.name) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/pages-github-pages-config@v3
+
+      # ШАГ ДЛЯ MAIN: Создаем файл CNAME только для продакшена
+      - name: Create CNAME for production
+        if: github.ref_name == 'main'
+        run: echo "studhub-io.ru" > ./CNAME
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' # Папка с вашим скомпилированным сайтом или корнем проекта
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
