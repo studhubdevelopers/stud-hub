@@ -1,12 +1,10 @@
 // Уведомления (колокольчик в шапке). Хранятся в localStorage, фильтруются по настройкам.
-const NOTIF_SEED = [
-  { id: 'n1', type: 'replies', color: '#e8f5f2', fg: '#2d8a7a', letter: 'П', text: '<strong>П. Глушнев</strong> ответил на ваш комментарий', ts: Date.now() - 15 * 60000, read: false },
-  { id: 'n2', type: 'invites', color: '#f0e8f8', fg: '#8b6ab5', letter: 'Л', text: '<strong>Л. Галлахер</strong> пригласил вас в команду', ts: Date.now() - 2 * 3600000, read: false },
-  { id: 'n3', type: 'community', color: '#e8f0f8', fg: '#4a8ab5', letter: 'К', text: 'Новое обсуждение в <strong>КИТиС</strong>', ts: Date.now() - 5 * 3600000, read: true },
-];
+const NOTIF_SEED = [];
 function getNotifs() {
   let list = lsGet('studhub_notifs', null);
   if (!list) { list = NOTIF_SEED; lsSet('studhub_notifs', list); }
+  const clean = list.filter(n => !['n1', 'n2', 'n3'].includes(n.id)); // убираем старые демо-уведомления
+  if (clean.length !== list.length) { list = clean; lsSet('studhub_notifs', list); }
   return list;
 }
 function pushNotif(type, html, letter) {

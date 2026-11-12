@@ -22,10 +22,10 @@ return `<div style="margin:10px 0 4px"><div style="display:flex;justify-content:
 function renderProjectCard(p) {
 const statusClass = p.status === 'active' ? 'status-active' : p.status === 'done' ? 'status-done' : 'status-draft';
 const statusText = p.status === 'active' ? 'Активный' : p.status === 'done' ? 'Завершён' : 'Черновик';
-const icons = ['📦', '🚀', '', '🎯'];
-const icon = icons[p.id % icons.length] || '📦';
+const icons = ['📦', '🚀', '💡', '🎯'];
+const icon = icons[Math.abs(+p.id || 0) % icons.length] || '📦';
 const colors = ['p1', 'p2', 'p3', 'p4'];
-const color = colors[p.id % colors.length] || 'p1';
+const color = colors[Math.abs(+p.id || 0) % colors.length] || 'p1';
 return `<div class="project-card-full" onclick="openProjectDetail(${p.id})">
 <div class="project-card-actions">
 <button class="action-btn" onclick="event.stopPropagation();editProject(${p.id})" title="Редактировать"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>
@@ -33,12 +33,11 @@ return `<div class="project-card-full" onclick="openProjectDetail(${p.id})">
 </div>
 <div class="project-card-header">
 <div class="project-card-icon ${color}">${icon}</div>
-<div style="flex:1;min-width:0"><div class="project-card-title">${escapeHtml(p.name)}</div></div>
-<span class="project-card-status ${statusClass}">${statusText}</span>
+<div style="flex:1;min-width:0"><div class="project-card-title">${escapeHtml(p.name)}</div><span class="project-card-status ${statusClass}" style="display:inline-block;margin-top:5px">${statusText}</span></div>
 </div>
 <div class="project-card-desc">${escapeHtml(p.desc) || 'Без описания'}</div>${campaignBlock(p)}
 <div class="project-card-footer">
-<div class="project-card-team"><div class="team-avatar" style="background:var(--accent-soft);color:var(--accent);">ДС</div></div>
+<div class="project-card-team"><div class="team-avatar" style="background:var(--accent-soft);color:var(--accent);">${escapeHtml(getInitials(getCurrentUser().name))}</div></div>
 <div class="project-card-stats"><span>👁 ${p.views || 0}</span><span>❤ ${p.likes || 0}</span><span>💬 ${p.comments || 0}</span></div>
 </div>
 </div>`;
@@ -165,6 +164,8 @@ document.getElementById('detailViews').textContent = p.views || 0;
 document.getElementById('detailLikes').textContent = p.likes || 0;
 document.getElementById('detailComments').textContent = p.comments || 0;
 document.getElementById('detailTeam').textContent = p.team || 1;
+const dIcon = document.getElementById('detailIcon');
+if (dIcon) { const ic = ['📦', '🚀', '💡', '🎯'], n = Math.abs(+p.id || 0) % 4; dIcon.textContent = ic[n]; dIcon.className = 'project-card-icon p' + (n + 1); }
 const statusEl = document.getElementById('detailStatus');
 statusEl.textContent = p.status === 'active' ? 'Активный' : p.status === 'done' ? 'Завершён' : 'Черновик';
 statusEl.className = 'project-card-status ' + (p.status === 'active' ? 'status-active' : p.status === 'done' ? 'status-done' : 'status-draft');
@@ -182,30 +183,41 @@ if (!p) return;
 if (p.pubId) copyProjectLink(p.pubId);
 else showToast('Проект не опубликован — ссылки пока нет', 'error');
 }
-async function editProject(id) {
+let editingProjectId = null;
+function editProject(id) {
 const p = getProjects().find(x => x.id === id);
 if (!p) return;
-const newName = prompt('Новое название:', p.name);
-if (newName === null) return;
-const newDesc = prompt('Новое описание:', p.desc);
-if (newDesc === null) return;
+editingProjectId = id;
+document.getElementById('editProjName').value = p.name || '';
+document.getElementById('editProjDesc').value = p.desc || '';
+openModal('editProjectModal');
+}
+let savingProject = false;
+async function saveEditedProject() {
+if (savingProject) return;
+const name = document.getElementById('editProjName').value.trim().slice(0, 80);
+const desc = document.getElementById('editProjDesc').value.trim().slice(0, 2000);
+if (!name) { showToast('Введите название проекта', 'error'); return; }
 const projects = getProjects();
-const idx = projects.findIndex(x => x.id === id);
-if (idx !== -1) {
-projects[idx].name = newName || projects[idx].name;
-projects[idx].desc = newDesc || projects[idx].desc;
+const idx = projects.findIndex(x => x.id === editingProjectId);
+if (idx === -1) { closeModal('editProjectModal'); return; }
 const pj = projects[idx];
+pj.name = name; pj.desc = desc;
+savingProject = true;
+const btn = document.getElementById('editProjSave'); if (btn) btn.disabled = true;
+try {
 if (pj.pubId) {
 if (BACKEND) {
-try { await backendUpdateProject(pj.pubId, { name: pj.name, desc: pj.desc, icon: pj.name.trim()[0].toUpperCase() }); }
+try { await backendUpdateProject(pj.pubId, { name: pj.name, desc: pj.desc, icon: pj.name[0].toUpperCase() }); }
 catch (e) { showToast(backendErrorText(e), 'error'); return; }
-} else { const pub = getPublicProjects(), j = pub.findIndex(x => x.id === pj.pubId); if (j >= 0) { pub[j].name = pj.name; pub[j].desc = pj.desc; pub[j].about = pj.desc; pub[j].icon = pj.name.trim()[0].toUpperCase(); savePublicProjects(pub); } }
+} else { const pub = getPublicProjects(), j = pub.findIndex(x => x.id === pj.pubId); if (j >= 0) { pub[j].name = pj.name; pub[j].desc = pj.desc; pub[j].about = pj.desc; pub[j].icon = pj.name[0].toUpperCase(); savePublicProjects(pub); } }
 }
 saveProjects(projects);
+closeModal('editProjectModal');
 renderMyProjects();
 renderFundraisingProjects();
 showToast('Проект обновлён', 'success');
-}
+} finally { savingProject = false; if (btn) btn.disabled = false; }
 }
 async function deleteProject(id) {
 const target = getProjects().find(x => x.id === id);

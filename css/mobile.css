@@ -1,20 +1,32 @@
 /* Мобильная версия: выдвижное меню, нижняя панель, компактная шапка */
-.burger, .bottom-nav, .drawer-backdrop { display:none; }
+html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+a, button, .nav-item, .header-icon, .tab-btn, .search-result-item { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+.burger, .bottom-nav, .drawer-backdrop, .search-toggle, .search-close { display:none; }
 .burger { width:40px; height:40px; border:none; border-radius:50%; background:var(--surface-3); align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
 .burger svg { width:22px; height:22px; fill:var(--text-2); }
 .nav-item.active, .bottom-nav a.active { font-weight:700; }
 
 @media (max-width: 900px) {
   .header { padding:0 12px; gap:8px; }
-  .header-left { gap:8px; }
+  .header-left { gap:8px; flex-shrink:0; }
   .burger { display:flex; }
   .logo-text { display:none; }
-  .header-center { max-width:none; min-width:0; margin:0; }
-  .search-bar input { min-width:0; width:100%; }
-  .header-right { flex-shrink:0; }
-  .search-bar { width:100%; padding:0 12px; }
-  .header-right { gap:6px; }
+  .search-toggle { display:flex; border:none; padding:0; }
+  .search-toggle svg { width:20px; height:20px; fill:var(--text-2); }
+  .header-right { flex-shrink:0; gap:6px; margin-left:auto; }
   #btnCreateProject, .user-info { display:none; }
+  .user-profile { padding:0; }
+  /* строка поиска скрыта, пока не нажата лупа; тогда закрывает всю шапку */
+  .header-center { display:none; margin:0; max-width:none; }
+  body.search-open .header-center { display:flex; position:absolute; top:0; left:0; right:0; height:100%; padding:0 12px; gap:10px; align-items:center; background:var(--surface); z-index:5; }
+  .search-bar { width:100%; flex:1; min-width:0; padding:0 14px; }
+  .search-bar input { min-width:0; width:100%; font-size:16px; }
+  .search-close { display:block; border:none; background:none; color:var(--accent); font:inherit; font-size:14px; font-weight:600; padding:10px 4px; cursor:pointer; flex-shrink:0; }
+  .search-results { position:absolute; top:calc(100% + 4px); left:12px; right:12px; max-height:calc(100dvh - 140px); max-height:calc(100vh - 140px); -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+  .search-result-item { padding:12px; min-height:48px; }
+  .search-result-info { min-width:0; }
+  .search-result-title, .search-result-sub { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .search-result-type { flex-shrink:0; }
   .wallet-chip { padding:8px 10px; }
   .notif-dropdown { position:fixed; top:68px; left:8px; right:8px; width:auto; }
   .dropdown { right:-4px; }
@@ -46,7 +58,7 @@
   .modal-body { padding:18px 16px; }
   .modal-header, .modal-footer { padding-left:16px; padding-right:16px; }
   .modal-footer { position:sticky; bottom:0; background:var(--surface); flex-wrap:wrap; }
-  .project-detail-stats { grid-template-columns:repeat(2,1fr); }
+  .project-detail-stats { grid-template-columns:repeat(2, minmax(0, 1fr)); }
   .project-detail-actions { flex-wrap:wrap; }
   .composer { flex-wrap:wrap; }
   .form-input, .form-textarea, .form-select, .search-bar input { font-size:16px; } /* iOS не приближает страницу при вводе */
@@ -54,5 +66,55 @@
   .tabs-row { overflow-x:auto; flex-wrap:nowrap; padding-bottom:4px; }
   .tabs-row .tab-btn { white-space:nowrap; flex-shrink:0; }
 }
-@media (max-width: 380px) { .wallet-chip svg { display:none; } .header-icon { width:36px; height:36px; } }
-@media (display-mode: standalone) { .header { padding-top:env(safe-area-inset-top); height:calc(64px + env(safe-area-inset-top)); } }
+@media (max-width: 600px) {
+  .wallet-chip { display:none; } /* «Кошелёк» есть в нижней панели; иначе шапка не помещается */
+  body { min-height:100vh; min-height:100dvh; }
+  /* iOS увеличивает страницу при фокусе на полях со шрифтом < 16px */
+  input:not([type=checkbox]):not([type=radio]):not([type=range]), textarea, select { font-size:16px !important; }
+  /* ничто не должно раздвигать страницу вширь */
+  .main-content, .view { min-width:0; max-width:100%; }
+  img, video, svg, canvas, iframe { max-width:100%; }
+  .main-content { overflow-x:hidden; }
+  .modal { max-height:92vh; max-height:92dvh; }
+  .asset-item { padding:14px; gap:10px; }
+  .asset-info { min-width:0; }
+  .asset-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .asset-size { flex-shrink:0; }
+}
+@media (max-width: 380px) { .header { padding:0 8px; gap:4px; } .header-right { gap:4px; } .header-icon { width:36px; height:36px; } .burger { width:36px; height:36px; } .logo-icon { transform:scale(.9); } }
+@media (display-mode: standalone) { .header { padding-top:env(safe-area-inset-top); height:calc(64px + env(safe-area-inset-top)); } body.search-open .header-center { padding-top:env(safe-area-inset-top); } }
+
+/* ===== Доработки мобильной версии ===== */
+html, body { max-width:100%; overflow-x:clip; }
+.layout, .main-content, .view, .modal, .modal-body { min-width:0; }
+.pp-title, .funding-title, .project-card-title, .post-title, .profile-name, .disc-title { overflow-wrap:anywhere; }
+body.modal-open { overflow:hidden; }
+.project-card-header { padding-right:76px; }
+.auth-brand .logo-text { display:block; }
+.amount-chips .tab-btn { border:1px solid var(--border); background:var(--surface); }
+.amount-chips .tab-btn.active { border-color:var(--accent); }
+.boot-splash { position:fixed; inset:0; z-index:6000; background:var(--bg); display:flex; align-items:center; justify-content:center; transition:opacity .25s; }
+.boot-splash.hide { opacity:0; pointer-events:none; }
+.boot-spinner { width:36px; height:36px; border-radius:50%; border:3px solid var(--border); border-top-color:var(--accent); animation:bootSpin .8s linear infinite; }
+@keyframes bootSpin { to { transform:rotate(360deg); } }
+@media (max-width: 600px) {
+  .setting-row { flex-wrap:wrap; gap:8px; }
+  .setting-row .segmented { width:100%; }
+  .segmented button { flex:1 1 auto; }
+  .profile-info-section { padding:0 16px 18px; }
+  .profile-info-top > div:first-child { flex-direction:column; align-items:flex-start !important; }
+  .profile-details { padding-left:0; padding-top:10px; }
+  .profile-name { font-size:21px; }
+  .profile-edit-section { text-align:left; width:100%; padding-top:0; }
+  .btn-edit-profile { width:100%; justify-content:center; }
+  .profile-stats { gap:10px 20px; }
+  .stat-reviews { margin-left:0; }
+  .profile-tabs { overflow-x:auto; flex-wrap:nowrap; padding-bottom:4px; }
+  .profile-tab { white-space:nowrap; flex-shrink:0; }
+  .profile-grid { grid-template-columns:minmax(0,1fr); }
+  .stats-row { gap:10px; }
+  .stat-box { min-width:calc(50% - 5px); padding:14px 16px; }
+  .section-header .section-title { font-size:18px; }
+  .btn-action { flex:1 1 calc(50% - 8px); justify-content:center; }
+  .pp-stats b { font-size:14px; }
+}

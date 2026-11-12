@@ -1,12 +1,6 @@
 // Обсуждения StudHub: Supabase при подключённом backend, локальный режим — без изменений схемы аккаунтов.
 const DISC_CATS=['Вопросы','Идеи','Учёба','Общага','Ищу команду','Оффтоп'];
-const seedDiscussions=[
- {id:'s1',title:'Как вы совмещаете учёбу и пет-проекты?',text:'Пары, домашка, ещё и свой проект. Делитесь, как планируете время и не выгораете.',cat:'Учёба',author:'А. Смирнов',ts:Date.now()-3*36e5,base:34,c0:12},
- {id:'s2',title:'Нужен дизайнер в проект «Карта тихих мест»',text:'Нужен человек на макеты в Figma. Можно без опыта — разберёмся вместе.',cat:'Ищу команду',author:'Л. Галлахер',ts:Date.now()-26*36e5,base:21,c0:7},
- {id:'s3',title:'Что делать, если в общаге шумят после 23:00?',text:'Соседи сверху устраивают вечеринки по будням. Как решали такое у вас?',cat:'Общага',author:'К. Дейко',ts:Date.now()-50*36e5,base:15,c0:19},
- {id:'s4',title:'Идея: общий банк конспектов по предметам',text:'Предлагаю собирать конспекты в одном месте по курсам и преподавателям.',cat:'Идеи',author:'П. Глушнев',ts:Date.now()-5*864e5,base:48,c0:15},
- {id:'s5',title:'Какой стек выбрать для первого pet-проекта?',text:'Знаю HTML/CSS и немного JS. React сразу или сначала чистый JS?',cat:'Вопросы',author:'Анна М.',ts:Date.now()-9*36e5,base:9,c0:5}
-];
+const seedDiscussions=[];
 let discCat='Все',discSort='hot',discQ='',discMine=false, discRows=null, discBusy=false, activeDiscThread=null;
 const discCommentsCache={};
 function discMapRow(r){return {id:r.id,title:r.title,text:r.body||'',cat:r.category,author:r.author_name||'Студент',authorId:r.author_id,ts:Date.parse(r.created_at)||Date.now(),base:r.score||0,c0:r.comment_count||0,mine:r.author_id===activeUserId(),db:true};}

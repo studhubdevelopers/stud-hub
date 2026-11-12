@@ -39,7 +39,6 @@ function renderSettings() {
     toggleRow('set.n.toast', 'set.n.toast.d', n.toast, "setNotif('toast',this.checked)") +
     toggleRow('set.n.replies', '', n.replies, "setNotif('replies',this.checked)") +
     toggleRow('set.n.donations', '', n.donations, "setNotif('donations',this.checked)") +
-    toggleRow('set.n.community', '', n.community, "setNotif('community',this.checked)") +
     toggleRow('set.n.invites', '', n.invites, "setNotif('invites',this.checked)") +
     toggleRow('set.n.digest', 'set.n.digest.d', n.digest, "setNotif('digest',this.checked)");
   document.getElementById('paySettings').innerHTML =

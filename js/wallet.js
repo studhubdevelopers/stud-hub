@@ -30,7 +30,7 @@ function renderWallet() {
   ['walletBalance', 'walletChipAmount', 'supportBalance'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = bal; });
   const nav = document.getElementById('navWalletBalance'); if (nav) nav.textContent = bal;
   const topped = w.tx.filter(x => x.amount > 0).reduce((s, x) => s + x.amount, 0);
-  const spent = -w.tx.filter(x => x.amount < 0).reduce((s, x) => s + x.amount, 0);
+  const spent = Math.abs(w.tx.filter(x => x.amount < 0).reduce((s, x) => s + x.amount, 0));
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   set('walletTopped', fmtRub(topped)); set('walletSpent', fmtRub(spent));
   set('walletBacked', getSupportedProjectIds().length);

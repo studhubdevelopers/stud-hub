@@ -67,11 +67,7 @@ function openHelp() {
 /* ---------- Свои на связи: чат ---------- */
 // Локальный режим: собеседники из списка SB_MEMBERS, переписка хранится в браузере.
 // Режим Supabase (BACKEND): настоящие личные сообщения между аккаунтами (таблица messages, см. supabase/chat.sql).
-const SB_MEMBERS = [
-  { id: 'П. Глушнев', name: 'П. Глушнев', role: 'Студент · КИТиС', ini: 'ПГ', bg: '#f0e8f8', fg: '#8b6ab5' },
-  { id: 'Л. Галлахер', name: 'Л. Галлахер', role: 'Студент · БФУ', ini: 'ЛГ', bg: '#e8f0f8', fg: '#4a8ab5' },
-  { id: 'Анна М.', name: 'Анна М.', role: 'Студент · КИТиС', ini: 'АМ', bg: '#f5f0e8', fg: '#b59a4a' }
-];
+const SB_MEMBERS = [];
 const SB_COLORS = [['#f0e8f8', '#8b6ab5'], ['#e8f0f8', '#4a8ab5'], ['#f5f0e8', '#b59a4a'], ['var(--accent-soft)', 'var(--accent)']];
 let sbPeers = [], sbThreads = {}, sbChatWith = null, sbPoll = null, sbSearchT = null, sbSetupHint = false;
 function sbOnlineMode() { return typeof BACKEND !== 'undefined' && BACKEND && typeof sb !== 'undefined' && sb; }
@@ -122,9 +118,9 @@ function sbMemberHtml(p, sub, click, dot) {
 }
 async function sbRefreshBlock() {
   const box = document.getElementById('sbOnline'); if (!box || !activeUserId()) return;
-  if (!sbIsBackend()) {                       // демо-режим без Supabase: показываем вымышленных участников
-    const me = getCurrentUser(), mp = sbPeerFrom('me', me.name, 'Студент · ' + (me.campus === 'kitis' ? 'КИТиС' : 'StudHub'));
-    box.innerHTML = sbMemberHtml(mp, mp.role, `switchView('profile')`, true) + SB_MEMBERS.map(m => sbMemberHtml(m, m.role, `openChat('${m.id}')`, true)).join('');
+  if (!sbIsBackend()) {                       // режим без Supabase: только вы
+    const me = getCurrentUser(), mp = sbPeerFrom('me', me.name, me.subtitle || ('Студент · ' + (eduShort(me.campus, me.city) || 'StudHub')));
+    box.innerHTML = sbMemberHtml(mp, mp.role, `switchView('profile')`, true) + SB_MEMBERS.map(m => sbMemberHtml(m, m.role, `openChat('${m.id}')`, true)).join('') + (SB_MEMBERS.length ? '' : '<div class="sb-empty" style="padding:12px 4px">Пока здесь никого нет. Пригласите друзей на StudHub.</div>');
     return;
   }
   if (!sbOnlineMode()) return;                // клиент Supabase ещё не готов

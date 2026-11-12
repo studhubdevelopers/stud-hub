@@ -1,5 +1,5 @@
 
-const VERSION = 'studhub-v18';
+const VERSION = 'studhub-v25';
 
 const SHELL = [
   './',
@@ -16,15 +16,18 @@ const SHELL = [
   './css/project.css',
   './css/rules.css',
   './css/sidebar.css',
+  './css/limits.css',
   './css/mobile.css',
+  './css/polish.css',
+  './css/edit-profile.css',
   './js/theme-init.js',
+  './js/limits.js',
   './js/storage.js',
   './js/i18n.js',
   './js/core.js',
-  './js/home-feed.js',
   './js/projects.js',
+  './js/edu-data.js',
   './js/profile.js',
-  './js/communities.js',
   './js/ratings-comments.js',
   './js/discussions.js',
   './js/profile-posts.js',
@@ -93,18 +96,15 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  event.respondWith(
-    caches.match(req).then(hit => {
-      const network = fetch(req).then(async response => {
-        if (response.ok) {
-          const copy = response.clone();
-          await caches.open(VERSION)
-            .then(cache => cache.put(req, copy));
-        }
-        return response;
-      });
-
-      return hit || network.catch(() => hit);
-    })
-  );
+  // Файлы сайта: сначала сеть (чтобы после обновления не было смеси старого JS с новым HTML),
+  // при плохой связи через 4 секунды отдаём копию из кэша.
+  event.respondWith((async () => {
+    const cached = await caches.match(req);
+    const net = fetch(req).then(async response => {
+      if (response.ok) { const copy = response.clone(); caches.open(VERSION).then(c => c.put(req, copy)); }
+      return response;
+    });
+    if (!cached) return net;
+    return Promise.race([net, new Promise(resolve => setTimeout(() => resolve(cached), 4000))]).catch(() => cached);
+  })());
 });

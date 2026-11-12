@@ -1,6 +1,6 @@
 // Основа: хелперы, localStorage, тосты, навигация, меню
 function getInitials(name) { if (!name) return '??'; return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2); }
-function getCurrentUser() { return JSON.parse(userStore.getItem('currentUser') || '{"name":"Дмитрий С.","campus":"kitis","subtitle":"КИТиС · 1 курс · Калининград","bio":"Пишу код, собираю команду и превращаю идеи в проекты.","username":"dimidrol","city":"Калининград","interests":"Веб-разработка,Дизайн интерфейсов,React,TypeScript,Хакатоны,Чай и код"}'); }
+function getCurrentUser() { return JSON.parse(userStore.getItem('currentUser') || '{"name":"Студент","campus":"other","subtitle":"","bio":"","username":"student","city":"","interests":""}'); }
 function saveCurrentUser(user) {
   const prev = userStore.getItem('currentUser');
   userStore.setItem('currentUser', JSON.stringify(user));
@@ -31,7 +31,7 @@ document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 const view = document.getElementById('view-' + viewName);
 if (view) view.classList.add('active');
-const navMap = { home: 'nav-home', community: 'nav-communities', communitylist: 'nav-communities', allcommunities: 'nav-communities', discussions: 'nav-discussions', myprojects: 'nav-myprojects', assets: 'nav-assets', subs: 'nav-subs', project: 'nav-home', wallet: 'nav-wallet', settings: 'nav-settings', profile: null };
+const navMap = { home: 'nav-home', discussions: 'nav-discussions', myprojects: 'nav-myprojects', assets: 'nav-assets', subs: 'nav-subs', project: 'nav-home', wallet: 'nav-wallet', settings: 'nav-settings', profile: null };
 const navEl = document.getElementById(navMap[viewName]);
 if (navEl) navEl.classList.add('active');
 window.scrollTo(0, 0);
@@ -41,7 +41,6 @@ if (viewName === 'myprojects') renderMyProjects();
 if (viewName === 'home') renderFundraisingProjects();
 if (viewName === 'profile') { updateProfile(); renderProfileTab(); }
 if (viewName === 'discussions') renderDiscussions();
-if (viewName === 'communitylist' || viewName === 'allcommunities') renderAllCommunities();
 if (viewName === 'subs') renderFundedProjects();
 if (viewName === 'assets') renderAssets();
 if (viewName === 'wallet') renderWallet();
@@ -68,5 +67,4 @@ if (action === 'logout' || action === 'switch') logout();   // выход из �
 else if (action === 'settings') switchView('settings');
 }
 
-function toggleStar(el) { const svg = el.querySelector('svg'); svg.style.fill = svg.style.fill === 'rgb(240, 192, 64)' ? '#ccc' : '#f0c040'; }
 function switchProfileTab(btn) { document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active')); btn.classList.add('active'); }

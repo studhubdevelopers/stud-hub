@@ -1,17 +1,11 @@
 // Ресурсы (загрузка файлов)
-const demoAssets = [
- {name:'конспект 07.10.2026.txt',meta:'Конспекты по алгоритмизации · 7 октября 2026',size:'2,4 МБ',type:'doc'},
- {name:'фото_общаги_2026.jpg',meta:'Жизнь в общаге · 5 октября 2026',size:'4,1 МБ',type:'img'},
- {name:'studhub-prototype.zip',meta:'Проект StudHub · 4 октября 2026',size:'12,8 МБ',type:'code'},
- {name:'правила_колледжа.pdf',meta:'Документы КИТиС · 1 октября 2026',size:'856 КБ',type:'pdf'},
- {name:'ЭТО_ТОЧНО_ЛАСТОВАЯ_КУРСОВАЯ.docx',meta:'Курсовая работа · 28 сентября 2026',size:'1,2 МБ',type:'doc'}
-];
+const demoAssets = [];
 function getUploadedAssets(){try{return JSON.parse(userStore.getItem('studhub_uploaded_assets')||'[]')}catch(e){return []}}
 function renderAssets(){
  const list=document.getElementById('assetsList');if(!list)return;
  const uploaded=getUploadedAssets();
  const all=[...demoAssets.map((x,i)=>({...x,demo:true,id:'demo-'+i})),...uploaded];
- list.innerHTML=all.map((f)=>`<div class="asset-item"><div class="asset-icon ${f.type||'doc'}"><span style="font-size:12px;font-weight:800">${(f.name.split('.').pop()||'FILE').slice(0,4).toUpperCase()}</span></div><div class="asset-info"><div class="asset-name">${escapeHtml(f.name)}</div><div class="asset-meta">${escapeHtml(f.meta||'Добавлен в мои файлы')}</div></div><div class="asset-size">${f.size||''}</div>${f.data?`<button class="asset-remove" onclick="downloadAsset('${f.id}')">Скачать</button>`:''}${!f.demo?`<button class="asset-remove" onclick="removeAsset('${f.id}')">Удалить</button>`:''}</div>`).join('');
+ list.innerHTML=!all.length?'<div style="text-align:center;color:var(--muted);padding:40px 16px;font-size:14px;line-height:1.6"><div style="font-size:34px;margin-bottom:8px">📁</div><b style="color:var(--text)">Файлов пока нет</b><br>Добавьте документы, изображения или архивы.</div>':all.map((f)=>`<div class="asset-item"><div class="asset-icon ${f.type||'doc'}"><span style="font-size:12px;font-weight:800">${(f.name.split('.').pop()||'FILE').slice(0,4).toUpperCase()}</span></div><div class="asset-info"><div class="asset-name">${escapeHtml(f.name)}</div><div class="asset-meta">${escapeHtml(f.meta||'Добавлен в мои файлы')}</div></div><div class="asset-size">${f.size||''}</div>${f.data?`<button class="asset-remove" onclick="downloadAsset('${f.id}')">Скачать</button>`:''}${!f.demo?`<button class="asset-remove" onclick="removeAsset('${f.id}')">Удалить</button>`:''}</div>`).join('');
 }
 function escapeHtml(value){return String(value||'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
 async function handleAssetFiles(fileList){

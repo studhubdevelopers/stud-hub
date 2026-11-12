@@ -6,14 +6,14 @@
 .sb-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 24px 12px; line-height: 1.5; }
 .sb-x { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; padding: 6px; border-radius: 6px; }
 .sb-x:hover { background: var(--surface-3); color: #e74c3c; }
-.sb-sch-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+.sb-sch-form { display: grid; grid-template-columns: minmax(0, 1fr) 1fr; gap: 10px; margin-bottom: 8px; }
 .sb-sch-form .full { grid-column: 1 / -1; }
 .sb-sch-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--surface-3); }
 .sb-sch-item.past { opacity: .5; }
 .sb-faq { border: 1px solid var(--border); border-radius: 10px; padding: 0 14px; margin-bottom: 8px; }
 .sb-faq summary { cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text); padding: 12px 0; }
 .sb-faq p { font-size: 13px; color: var(--text-2); line-height: 1.6; margin: 0 0 12px; }
-.sb-chat { display: grid; grid-template-columns: 220px 1fr; height: min(70vh, 520px); }
+.sb-chat { display: grid; grid-template-columns: 220px minmax(0, 1fr); height: min(70vh, 520px); }
 .sb-chat-side { display: block; border-right: 1px solid var(--surface-3); overflow-y: auto; padding: 8px; }
 .sb-person { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 10px; cursor: pointer; }
 .sb-person:hover, .sb-person.active { background: var(--surface-3); }
@@ -32,7 +32,7 @@
 .sb-note { font-size: 11px; color: var(--muted); padding: 0 18px 6px; }
 .sb-chat-input { display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--surface-3); }
 .sb-chat-input .form-input { flex: 1; }
-@media (max-width: 600px) { .sb-chat { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: 75vh; } .sb-chat-side { display: flex; border-right: none; border-bottom: 1px solid var(--surface-3); overflow-x: auto; } .sb-clip { display: none; } .sb-sch-form { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .sb-chat { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; height: 75vh; } .sb-chat-side { display: flex; border-right: none; border-bottom: 1px solid var(--surface-3); overflow-x: auto; } .sb-clip { display: none; } .sb-sch-form { grid-template-columns: minmax(0, 1fr); } }
 
 .sb-chat-head b.sb-link { cursor: pointer; color: var(--accent); }
 .sb-chat-head b.sb-link:hover { text-decoration: underline; }

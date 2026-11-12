@@ -6,7 +6,7 @@
 .wallet-hero-amount { font-size: 38px; font-weight: 800; margin-top: 4px; letter-spacing: -.5px; }
 .wallet-hero .btn-topup { background: #fff; color: #1a1a2e; border: none; padding: 12px 26px; border-radius: 24px; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
 .wallet-hero .btn-topup:hover { transform: translateY(-1px); }
-.wallet-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.wallet-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
 .wallet-stat { background: var(--surface); border-radius: 14px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
 .wallet-stat b { display: block; font-size: 20px; margin-bottom: 2px; }
 .wallet-stat span { font-size: 12px; color: var(--muted); }
@@ -21,15 +21,15 @@
 .tx-amount { font-weight: 700; font-size: 15px; white-space: nowrap; }
 .tx-amount.in { color: var(--accent); }
 .tx-amount.out { color: #e74c3c; }
-.method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+.method-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
 .method-tile { border: 2px solid var(--border); border-radius: 12px; padding: 12px 6px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 600; background: var(--surface); color: var(--text); font-family: inherit; }
 .method-tile .m-ico { display: block; font-size: 22px; margin-bottom: 4px; }
 .method-tile.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
-.card-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.card-fields { display: grid; grid-template-columns: minmax(0, 1fr) 1fr; gap: 10px; }
 .card-fields .full { grid-column: 1 / -1; }
 .field-error { color: #e74c3c; font-size: 12px; margin-top: 4px; min-height: 16px; }
 .pay-summary { display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; padding: 12px 0 0; border-top: 1px dashed var(--border); margin-top: 8px; }
 .wallet-line { display: flex; justify-content: space-between; align-items: center; background: var(--accent-soft); border-radius: 10px; padding: 10px 14px; font-size: 13px; margin-bottom: 14px; }
 .wallet-line a { color: var(--accent); font-weight: 700; cursor: pointer; }
 .demo-note { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 12px; }
-@media (max-width: 700px) { .wallet-stats { grid-template-columns: 1fr; } .method-grid { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .wallet-stats { grid-template-columns: minmax(0, 1fr); } .method-grid { grid-template-columns: minmax(0, 1fr); } }

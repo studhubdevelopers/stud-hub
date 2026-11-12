@@ -57,7 +57,7 @@ async function renderProfileTab() {
   const own = !viewingProfile || viewingProfile.id === activeUserId();
   const empty = (title, desc) => `<div class="empty-state" style="margin-bottom:20px"><div class="empty-state-title">${title}</div><div class="empty-state-desc" style="margin-bottom:0">${desc}</div></div>`;
   if (profileTab === 'posts') {
-    box.innerHTML = own ? `<div class="composer"><div class="composer-avatar">${escapeHtml(getInitials(user.name))}</div><div style="flex:1;font-size:14px;color:var(--muted)">О чём хотите рассказать?</div><button class="btn-submit" onclick="openPostModal()">Создать пост</button></div><div class="profile-posts-list">Загружаем публикации…</div>` : '<div class="profile-posts-list">Загружаем публикации…</div>';
+    box.innerHTML = own ? `<div class="composer is-link" role="button" tabindex="0" onclick="openPostModal()" onkeydown="if(event.key==='Enter')openPostModal()"><div class="composer-avatar">${escapeHtml(getInitials(user.name))}</div><div style="flex:1;font-size:14px;color:var(--muted)">О чём хотите рассказать?</div><button class="btn-submit" type="button">Создать пост</button></div><div class="profile-posts-list">Загружаем публикации…</div>` : '<div class="profile-posts-list">Загружаем публикации…</div>';
     const posts = await loadProfilePosts(); profilePostsCache = posts;
     const list = box.querySelector('.profile-posts-list');
     if (list) list.innerHTML = posts.length ? posts.map(p => {

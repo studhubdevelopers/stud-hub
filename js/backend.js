@@ -147,7 +147,14 @@ async function backendInit() {
   const c = STUDHUB_CONFIG;
   sb = supabase.createClient(c.supabaseUrl, c.supabaseAnonKey, { auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
   const { data } = await sb.auth.getSession();
-  if (data.session) { setLocalSession(data.session.user); await syncProfileFromDatabase(data.session.user); await loadAll(); } else clearLocalSession();
+  if (data.session) {
+    setLocalSession(data.session.user);
+    // На слабой сети не держим пользователя перед пустым экраном: ждём данные не дольше 6 секунд, остальное дорисуется само
+    const wait = p => Promise.race([p, new Promise(r => setTimeout(r, 6000))]);
+    const late = syncProfileFromDatabase(data.session.user).then(loadAll);
+    await wait(late);
+    late.then(() => { try { updateProfile(); renderFundraisingProjects(); renderFundedProjects(); renderMyProjects(); renderWallet(); } catch (e) {} });
+  } else clearLocalSession();
   sb.auth.onAuthStateChange((ev, s) => {
     if (ev === 'PASSWORD_RECOVERY') setTimeout(recoverPassword, 400);
     if (ev === 'SIGNED_OUT' && activeUserId()) { clearLocalSession(); location.reload(); }

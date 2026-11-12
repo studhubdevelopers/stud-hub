@@ -11,11 +11,9 @@ if (!getActiveAccount()) {
 } else {
   // Вошли: запускаем приложение с данными этого аккаунта
   updateProfile();
-  renderPosts('top');
   renderFundraisingProjects();
   renderMyProjects();
   updateMyProjectsStats(getProjects());
-  renderAllCommunities();
   renderFundedProjects();
   renderAssets();
   renderDiscFilters();
@@ -27,4 +25,5 @@ if (!getActiveAccount()) {
   routeFromHash();   // открыли ссылку вида #/project/<id> — показываем страницу проекта
 }
 }
-bootApp();
+bootApp().catch(e => console.error(e)).finally(() => { const sp = document.getElementById('bootSplash'); if (sp) { sp.classList.add('hide'); setTimeout(() => sp.remove(), 400); } });
+setTimeout(() => { const sp = document.getElementById('bootSplash'); if (sp) sp.classList.add('hide'); }, 10000);

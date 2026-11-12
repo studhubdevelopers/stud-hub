@@ -6,18 +6,6 @@ const searchInput = document.getElementById('searchInput');
 const searchResults = document.getElementById('searchResults');
 let searchHits = [];
 
-// Перейти к посту на главной и подсветить его
-function goToPost(id) {
-  switchView('home');
-  setTimeout(() => {
-    const el = document.querySelector('.post-card[data-id="' + id + '"]');
-    if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    el.style.transition = 'box-shadow .3s';
-    el.style.boxShadow = '0 0 0 3px var(--accent)';
-    setTimeout(() => { el.style.boxShadow = ''; }, 2200);
-  }, 50);
-}
 // Перейти к обсуждению: открываем раздел и фильтруем список по его названию
 function goToDiscussion(title) {
   discCat = 'Все'; discMine = false; discQ = title.toLowerCase();
@@ -31,8 +19,6 @@ function findSearchHits(query) {
   const hits = [];
   getProjects().forEach(p => { if (has(p.name, p.desc)) hits.push({ type: t('search.project'), title: p.name, sub: p.desc ? p.desc.slice(0, 60) : 'Без описания', icon: '📦', color: '#e8f5f2', action: () => { switchView('myprojects'); openProjectDetail(p.id); } }); });
   allCampaigns().forEach(p => { if (has(p.name, p.desc, p.category)) hits.push({ type: t('search.fund'), title: p.name, sub: (p.desc || '').slice(0, 60), icon: p.icon, color: '#e8f5f2', action: () => showFundingDetails(p.id) }); });
-  allCommunitiesData.forEach(c => { if (has(c.name, c.desc)) hits.push({ type: t('search.community'), title: c.name, sub: c.desc, icon: c.letter, color: '#f0e8f8', action: () => openCommunity(c.id) }); });
-  homePostsData.forEach(p => { if (has(p.title, p.text)) hits.push({ type: t('search.post'), title: p.title, sub: p.community + ' · ' + p.author, icon: '📝', color: '#e8f0f8', action: () => goToPost(p.id) }); });
   getDiscs().forEach(d => { if (has(d.title, d.text)) hits.push({ type: t('search.disc'), title: d.title, sub: d.cat + ' · ' + d.author, icon: '💬', color: '#f5f0e8', action: () => goToDiscussion(d.title) }); });
   [...demoAssets, ...getUploadedAssets()].forEach(a => { if (has(a.name)) hits.push({ type: t('search.file'), title: a.name, sub: a.meta || '', icon: '📄', color: '#e8f0f8', action: () => switchView('assets') }); });
   return hits;
@@ -45,7 +31,7 @@ function paintSearchResults(raw) {
     searchResults.innerHTML = '<div class="search-empty">' + t('search.empty') + ' «' + escapeHtml(raw) + '»</div>';
   } else {
     searchResults.innerHTML = searchHits.slice(0, 8).map((r, i) => `
-<div class="search-result-item" onmousedown="event.preventDefault();handleSearchResult(${i})">
+<div class="search-result-item" onmousedown="event.preventDefault()" onclick="handleSearchResult(${i})">
 <div class="search-result-icon" style="background:${r.color};">${escapeHtml(r.icon)}</div>
 <div class="search-result-info"><div class="search-result-title">${escapeHtml(r.title)}</div><div class="search-result-sub">${escapeHtml(r.sub)}</div></div>
 <div class="search-result-type">${r.type}</div>
@@ -76,6 +62,7 @@ function handleSearchResult(idx) {
   searchResults.classList.remove('show');
   searchInput.value = '';
   searchInput.blur();
+  if (typeof closeMobileSearch === 'function') closeMobileSearch();
   if (hit && hit.action) hit.action();
 }
 searchInput.addEventListener('input', renderSearch);
@@ -83,7 +70,7 @@ searchInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && searchHits.length) handleSearchResult(0); // Enter открывает первый результат
   if (e.key === 'Escape') { searchResults.classList.remove('show'); searchInput.blur(); }
 });
-searchInput.addEventListener('blur', () => { setTimeout(() => searchResults.classList.remove('show'), 150); });
+searchInput.addEventListener('blur', () => { setTimeout(() => searchResults.classList.remove('show'), 250); });
 searchInput.addEventListener('focus', () => { if (searchInput.value.trim().length >= 2) renderSearch(); });
 
 // Close modals on overlay click
