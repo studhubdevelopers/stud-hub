@@ -17,7 +17,7 @@
 <title>StudHub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Onest:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/settings.css">
@@ -31,6 +31,7 @@
 <link rel="stylesheet" href="css/polish.css">
 <link rel="stylesheet" href="css/edit-profile.css">
 <link rel="stylesheet" href="css/design.css">
+<link rel="stylesheet" href="css/redesign.css">
 <script src="js/theme-init.js"></script>
 </head>
 <body>
@@ -117,12 +118,15 @@
 <div class="view" id="view-project"><div id="projectPage"></div></div>
 
 <div class="view active" id="view-home">
-<div class="breadcrumb">StudHub · краудфандинг</div>
-<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px;">
-<div><h1 class="page-title" style="margin-bottom:8px;" data-i18n="home.title">Проекты, которым нужна поддержка</h1><p data-i18n="home.lead" style="font-size:14px;color:var(--muted);line-height:1.6;max-width:720px;margin-bottom:18px;">Помогай студенческим идеям становиться реальностью. Поддержанные проекты появятся во вкладке «Подписки».</p></div>
+<section class="hero">
+<div class="hero-copy">
+<h1 class="hero-title" data-i18n="home.title">Проекты, которым нужна поддержка</h1>
+<p class="hero-lead" data-i18n="home.lead">Помогай студенческим идеям становиться реальностью. Поддержанные проекты появятся во вкладке «Подписки».</p>
+<div class="hero-cta"><button class="btn-submit hero-btn" type="button" onclick="openCreateModal()" data-i18n="home.place">Разместить проект</button><button class="hero-btn ghost" type="button" onclick="document.getElementById('fundraisingProjectsGrid').scrollIntoView({behavior:'smooth',block:'start'})">Смотреть проекты</button></div>
 </div>
 <div class="home-stats" id="homeStats"></div>
-<div class="composer is-link" style="margin-bottom:22px;" role="button" tabindex="0" onclick="openCreateModal()" onkeydown="if(event.key==='Enter')openCreateModal()"><div class="composer-avatar" id="composerAvatar">С</div><div style="flex:1;font-size:14px;color:var(--muted);" data-i18n="home.idea">Есть идея, которой нужно финансирование?</div><button class="btn-submit" type="button" data-i18n="home.place">Разместить проект</button></div>
+</section>
+<div class="composer is-link" hidden role="button" tabindex="0" onclick="openCreateModal()"><div class="composer-avatar" id="composerAvatar">С</div></div>
 <div class="section-block"><div class="section-header"><h2 class="section-title" data-i18n="home.seeking">Ищут финансирование</h2><span style="font-size:12px;color:var(--muted);">Проекты студентов</span></div><div class="projects-grid" id="fundraisingProjectsGrid"></div></div>
 </div>
 

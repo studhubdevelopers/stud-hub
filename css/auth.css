@@ -1,4 +1,4 @@
-/* Окно входа и регистрации ЫВАЫВПЫПЫПЫПВПР */
+/* Окно входа и регистрации */
 body.auth-required { overflow: hidden; }
 .auth-screen { position: fixed; inset: 0; z-index: 5000; background: var(--bg); display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;
   background-image: radial-gradient(circle at 15% 20%, var(--accent-soft-2), transparent 45%), radial-gradient(circle at 85% 80%, var(--accent-soft), transparent 45%); }
