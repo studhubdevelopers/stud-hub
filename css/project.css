@@ -48,3 +48,29 @@ body[data-view="project"] .sidebar-right { display:none; }
 body[data-view="project"] .layout { grid-template-columns:260px minmax(0, 1fr); }
 @media (max-width:1200px) { body[data-view="project"] .layout { grid-template-columns:220px minmax(0, 1fr); } }
 @media (max-width:900px) { body[data-view="project"] .layout { grid-template-columns: minmax(0, 1fr); } }
+
+/* ===== Новости проекта и этапы (Илья) ===== */
+.pp-subtitle{font-size:13px;color:var(--text-2);margin:-5px 0 16px;line-height:1.5}
+.project-milestones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}
+.project-milestone{display:flex;gap:10px;align-items:flex-start;padding:13px;border:1px solid var(--border);border-radius:12px;opacity:.58;background:var(--surface)}
+.project-milestone.reached{opacity:1;border-color:var(--accent);background:var(--accent-soft)}
+.pm-dot{width:24px;height:24px;flex:0 0 24px;border:1.5px solid var(--border);border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:12px;color:var(--accent)}
+.reached .pm-dot{border-color:var(--accent);background:var(--accent);color:white}
+.project-milestone div{display:flex;flex-direction:column;gap:3px;min-width:0}
+.project-milestone b{font-size:13px}.project-milestone small{font-size:11px;color:var(--text-2);line-height:1.4}.project-milestone strong{font-size:12px;color:var(--accent);margin-top:3px}
+.pp-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pp-section-head .pp-h2{margin-bottom:12px}.pp-update-count{font-size:12px;color:var(--text-2);border:1px solid var(--border);border-radius:20px;padding:4px 9px}
+.pp-update-composer{display:flex;flex-direction:column;gap:9px;padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:13px;margin:8px 0 16px}
+.pp-update-composer input,.pp-update-composer textarea{width:100%;box-sizing:border-box;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:9px;padding:11px 12px;font:inherit;font-size:13px;outline:none}
+.pp-update-composer textarea{resize:vertical;min-height:84px;line-height:1.5}
+.pp-update-composer input:focus,.pp-update-composer textarea:focus{border-color:var(--accent)}
+.pp-update-composer .btn-submit{align-self:flex-start}
+.pp-update{padding:15px 0;border-top:1px solid var(--border)}
+.pp-update-date{font-size:11px;color:var(--text-2);margin-bottom:6px}
+.pp-update h3{font-size:15px;margin:0 0 7px}
+.pp-update p{font-size:13px;line-height:1.65;color:var(--text-2);margin:0;overflow-wrap:anywhere}
+.pp-updates-empty{padding:22px 14px;text-align:center;border:1px dashed var(--border);border-radius:12px;display:flex;flex-direction:column;gap:6px}
+.pp-updates-empty b{font-size:13px}.pp-updates-empty span{font-size:12px;color:var(--text-2);line-height:1.5}
+.funding-card-impact{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 11px;margin:10px 0 12px;background:var(--surface);border-radius:9px;font-size:11px;color:var(--text-2)}
+.funding-card-impact b{color:var(--accent);font-size:12px}
+@media(max-width:600px){.project-milestones{grid-template-columns:1fr}.pp-update-composer .btn-submit{width:100%}}

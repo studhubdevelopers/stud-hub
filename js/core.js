@@ -31,7 +31,7 @@ document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 const view = document.getElementById('view-' + viewName);
 if (view) view.classList.add('active');
-const navMap = { home: 'nav-home', discussions: 'nav-discussions', myprojects: 'nav-myprojects', assets: 'nav-assets', subs: 'nav-subs', project: 'nav-home', wallet: 'nav-wallet', settings: 'nav-settings', profile: null };
+const navMap = { home: 'nav-home', discussions: 'nav-discussions', people: 'nav-people', myprojects: 'nav-myprojects', assets: 'nav-assets', subs: 'nav-subs', project: 'nav-home', wallet: 'nav-wallet', settings: 'nav-settings', profile: null };
 const navEl = document.getElementById(navMap[viewName]);
 if (navEl) navEl.classList.add('active');
 window.scrollTo(0, 0);
@@ -41,6 +41,7 @@ if (viewName === 'myprojects') renderMyProjects();
 if (viewName === 'home') renderFundraisingProjects();
 if (viewName === 'profile') { updateProfile(); renderProfileTab(); }
 if (viewName === 'discussions') renderDiscussions();
+if (viewName === 'people') peopleOpen();
 if (viewName === 'subs') renderFundedProjects();
 if (viewName === 'assets') renderAssets();
 if (viewName === 'wallet') renderWallet();

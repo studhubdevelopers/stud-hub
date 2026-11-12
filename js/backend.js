@@ -57,6 +57,10 @@ async function refreshPublic() {
     category: p.category, icon: p.icon, goal: p.goal, deadline: p.deadline ? Date.parse(p.deadline) : null, rewards: p.rewards || [],
     raised: p.base_raised, backers: p.base_backers, likes: p.base_likes, createdAt: Date.parse(p.created_at), donations: byProject[p.id] || [],
   }));
+  try {
+    const updates = await ok(c.from('project_updates').select('*').order('created_at', { ascending: false }).limit(300));
+    if (typeof PROJECT_UPDATES_CACHE !== 'undefined') PROJECT_UPDATES_CACHE = updates.map(u => ({id:u.id,projectId:u.project_id,title:u.title,body:u.body,authorId:u.author_id,authorName:u.author_name,createdAt:Date.parse(u.created_at)}));
+  } catch (updatesError) { console.warn('Лента проектов недоступна: примените project-updates-migration.sql', updatesError); }
   MY_DONATIONS = md.map(d => ({ projectId: d.project_id, amount: d.amount, reward: d.reward || '', msg: d.message || '', anon: d.anon, ts: Date.parse(d.created_at) }));
   syncLocalProjects();
 }
@@ -74,7 +78,7 @@ async function pullNotifs() {
   const list = getNotifs(), have = new Set(list.map(n => n.id));
   rows.reverse().forEach(r => {
     if (have.has('db' + r.id)) return;
-    list.unshift({ id: 'db' + r.id, type: r.type, color: '#e8f5f2', fg: '#2d8a7a', letter: '₽', text: escapeHtml(r.text), ts: Date.parse(r.created_at), read: false });
+    list.unshift({ id: 'db' + r.id, type: r.type, color: 'var(--accent-soft)', fg: 'var(--accent)', letter: '₽', text: escapeHtml(r.text), ts: Date.parse(r.created_at), read: false });
   });
   lsSet('studhub_notifs', list.slice(0, 30));
   renderNotifs();

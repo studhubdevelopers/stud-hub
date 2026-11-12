@@ -10,7 +10,7 @@ function getNotifs() {
 function pushNotif(type, html, letter) {
   if (getSettings().notif[type] === false) return;
   const list = getNotifs();
-  list.unshift({ id: 'n' + Date.now(), type, color: '#e8f5f2', fg: '#2d8a7a', letter: letter || '₽', text: html, ts: Date.now(), read: false });
+  list.unshift({ id: 'n' + Date.now(), type, color: 'var(--accent-soft)', fg: 'var(--accent)', letter: letter || '₽', text: html, ts: Date.now(), read: false });
   lsSet('studhub_notifs', list.slice(0, 30));
   renderNotifs();
 }

@@ -17,10 +17,10 @@ function goToDiscussion(title) {
 function findSearchHits(query) {
   const has = (...parts) => parts.some(x => x && String(x).toLowerCase().includes(query));
   const hits = [];
-  getProjects().forEach(p => { if (has(p.name, p.desc)) hits.push({ type: t('search.project'), title: p.name, sub: p.desc ? p.desc.slice(0, 60) : 'Без описания', icon: '📦', color: '#e8f5f2', action: () => { switchView('myprojects'); openProjectDetail(p.id); } }); });
-  allCampaigns().forEach(p => { if (has(p.name, p.desc, p.category)) hits.push({ type: t('search.fund'), title: p.name, sub: (p.desc || '').slice(0, 60), icon: p.icon, color: '#e8f5f2', action: () => showFundingDetails(p.id) }); });
-  getDiscs().forEach(d => { if (has(d.title, d.text)) hits.push({ type: t('search.disc'), title: d.title, sub: d.cat + ' · ' + d.author, icon: '💬', color: '#f5f0e8', action: () => goToDiscussion(d.title) }); });
-  [...demoAssets, ...getUploadedAssets()].forEach(a => { if (has(a.name)) hits.push({ type: t('search.file'), title: a.name, sub: a.meta || '', icon: '📄', color: '#e8f0f8', action: () => switchView('assets') }); });
+  getProjects().forEach(p => { if (has(p.name, p.desc)) hits.push({ type: t('search.project'), title: p.name, sub: p.desc ? p.desc.slice(0, 60) : 'Без описания', icon: '📦', color: 'var(--accent-soft)', action: () => { switchView('myprojects'); openProjectDetail(p.id); } }); });
+  allCampaigns().forEach(p => { if (has(p.name, p.desc, p.category)) hits.push({ type: t('search.fund'), title: p.name, sub: (p.desc || '').slice(0, 60), icon: p.icon, color: 'var(--accent-soft)', action: () => showFundingDetails(p.id) }); });
+  getDiscs().forEach(d => { if (has(d.title, d.text)) hits.push({ type: t('search.disc'), title: d.title, sub: d.cat + ' · ' + d.author, icon: '💬', color: 'var(--accent-soft)', action: () => goToDiscussion(d.title) }); });
+  [...demoAssets, ...getUploadedAssets()].forEach(a => { if (has(a.name)) hits.push({ type: t('search.file'), title: a.name, sub: a.meta || '', icon: '📄', color: 'var(--accent-soft)', action: () => switchView('assets') }); });
   return hits;
 }
 
@@ -51,7 +51,7 @@ function renderSearch() {
       const existing = new Set(searchHits.filter(h => h.profileId).map(h => h.profileId));
       profiles.forEach(p => {
         if (existing.has(p.id)) return;
-        searchHits.push({ type: 'Профиль', title: p.name || ('@' + p.username), sub: '@' + p.username + (p.subtitle ? ' · ' + p.subtitle : ''), icon: '👤', color: '#e8f5f2', profileId: p.id, profile: p, action: () => openPublicProfile(p) });
+        searchHits.push({ type: 'Профиль', title: p.name || ('@' + p.username), sub: '@' + p.username + (p.subtitle ? ' · ' + p.subtitle : ''), icon: '👤', color: 'var(--accent-soft)', profileId: p.id, profile: p, action: () => openPublicProfile(p) });
       });
       paintSearchResults(raw);
     });

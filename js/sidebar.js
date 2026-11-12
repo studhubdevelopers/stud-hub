@@ -68,7 +68,7 @@ function openHelp() {
 // Локальный режим: собеседники из списка SB_MEMBERS, переписка хранится в браузере.
 // Режим Supabase (BACKEND): настоящие личные сообщения между аккаунтами (таблица messages, см. supabase/chat.sql).
 const SB_MEMBERS = [];
-const SB_COLORS = [['#f0e8f8', '#8b6ab5'], ['#e8f0f8', '#4a8ab5'], ['#f5f0e8', '#b59a4a'], ['var(--accent-soft)', 'var(--accent)']];
+const SB_COLORS = [['var(--accent-soft)', 'var(--accent)']];
 let sbPeers = [], sbThreads = {}, sbChatWith = null, sbPoll = null, sbSearchT = null, sbSetupHint = false;
 function sbOnlineMode() { return typeof BACKEND !== 'undefined' && BACKEND && typeof sb !== 'undefined' && sb; }
 const sbIni = n => (String(n || '?').trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2)) || '?';

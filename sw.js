@@ -1,5 +1,5 @@
 
-const VERSION = 'studhub-v26';
+const VERSION = 'studhub-v27';
 
 const SHELL = [
   './',
@@ -20,6 +20,7 @@ const SHELL = [
   './css/mobile.css',
   './css/polish.css',
   './css/edit-profile.css',
+  './css/design.css',
   './js/theme-init.js',
   './js/limits.js',
   './js/storage.js',
@@ -38,6 +39,7 @@ const SHELL = [
   './js/assets.js',
   './js/auth.js',
   './js/rules.js',
+  './js/people.js',
   './js/search.js',
   './js/sidebar.js',
   './js/config.js',
