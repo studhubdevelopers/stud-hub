@@ -1,7 +1,7 @@
 // Настройки: тема, акцентный цвет, язык, уведомления, платежи, данные.
 const ACCENTS = ['#2d8a7a', '#3b82f6', '#8b5cf6', '#e8590c', '#d6336c'];
 const DEFAULT_SETTINGS = {
-  theme: 'light', accent: '#2d8a7a', lang: 'ru', anonDefault: false, confirmPay: true,
+  theme: 'dark', accent: '#e8590c', lang: 'ru', anonDefault: false, confirmPay: true,
   notif: { badge: true, toast: true, replies: true, donations: true, community: true, invites: true, digest: false },
 };
 function getSettings() {
