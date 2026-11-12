@@ -166,8 +166,10 @@ function openMember(name) {
   if (name === me) { switchView('profile'); return; }
   openChat(name);
 }
+function sbShowThread(on) { const c = document.querySelector('.sb-chat'); if (c) c.classList.toggle('in-thread', !!on); }
 async function openChat(id) {
   if (id) sbChatWith = id;
+  sbShowThread(!!id);
   openModal('chatModal');
   document.getElementById('chatSearchWrap').style.display = sbOnlineMode() ? '' : 'none';
   await sbLoad();
@@ -175,9 +177,9 @@ async function openChat(id) {
   renderChat();
   clearInterval(sbPoll);
   if (sbOnlineMode()) sbPoll = setInterval(async () => { if (!document.getElementById('chatModal').classList.contains('show')) { clearInterval(sbPoll); return; } const before = JSON.stringify(sbThreads); if (await sbLoad() && JSON.stringify(sbThreads) !== before) renderChat(true); }, 4000);
-  setTimeout(() => { const i = document.getElementById('chatInput'); if (i && sbChatWith) i.focus(); }, 50);
+  setTimeout(() => { const i = document.getElementById('chatInput'); if (i && sbChatWith && id) i.focus(); }, 50);
 }
-function sbPick(i) { sbChatWith = sbPeers[i].id; renderChat(); }
+function sbPick(i) { sbChatWith = sbPeers[i].id; sbShowThread(true); renderChat(); }
 function renderChat(keepInput) {
   const side = document.getElementById('chatPeople'), box = document.getElementById('chatMsgs');
   const input = document.getElementById('chatInput'), send = document.getElementById('chatSend');
@@ -194,7 +196,7 @@ function renderChat(keepInput) {
   if (sbSetupHint) { box.innerHTML = '<div class="sb-empty">Чат ещё не подключён к базе: выполните файл <b>supabase/chat.sql</b> в Supabase → SQL Editor.</div>'; return; }
   const msgs = m ? sbThreads[m.id] || [] : [];
   const atEnd = box.scrollHeight - box.scrollTop - box.clientHeight < 40;
-  box.innerHTML = !m ? '<div class="sb-empty">Выберите собеседника слева или найдите нового.</div>'
+  box.innerHTML = !m ? '<div class="sb-empty">Выберите диалог или найдите нового собеседника.</div>'
     : msgs.length ? msgs.map(x => `<div class="sb-msg ${x.mine ? 'me' : 'them'}"><div class="sb-bubble">${SB_ESC(x.text).replace(/\n/g, '<br>')}</div><div class="sb-time">${new Date(x.ts).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</div></div>`).join('')
     : `<div class="sb-empty">Начните переписку с ${SB_ESC(m.name)}.</div>`;
   if (!keepInput || atEnd) box.scrollTop = box.scrollHeight;
@@ -235,7 +237,7 @@ function sbSearchPeople(q) {
 function sbStartWith(id) {
   sbChatWith = id;
   document.getElementById('chatSearch').value = ''; document.getElementById('chatFound').innerHTML = '';
-  renderChat(); document.getElementById('chatInput').focus();
+  sbShowThread(true); renderChat(); document.getElementById('chatInput').focus();
 }
 window.addEventListener('load', () => {
   let tries = 0;

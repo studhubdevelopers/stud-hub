@@ -45,10 +45,10 @@
 </a>
 </div>
 <div class="header-center">
-<div class="search-bar">
+<form class="search-bar" role="search" autocomplete="off" onsubmit="return false" novalidate>
 <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-<input type="search" id="searchInput" name="studhub-q" placeholder="Поиск по StudHub..." data-i18n-ph="hdr.search" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search" inputmode="search">
-</div>
+<input type="search" id="searchInput" name="studhub-q" placeholder="Поиск по StudHub..." data-i18n-ph="hdr.search" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" data-lpignore="true" data-1p-ignore data-form-type="other" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search" inputmode="search">
+</form>
 <button type="button" class="search-close" id="searchClose" onclick="closeMobileSearch()" aria-label="Закрыть поиск">Отмена</button>
 <div class="search-results" id="searchResults"></div>
 </div>
@@ -59,7 +59,7 @@
 <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
 <span data-i18n="hdr.create">Создать проект</span>
 </button>
-<div class="header-icon sb-mobile-only" id="chatIcon" role="button" tabindex="0" aria-label="Чат" onclick="openChat()" onkeydown="if(event.key==='Enter')openChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
+<div class="header-icon" id="chatIcon" title="Сообщения" role="button" tabindex="0" aria-label="Чат" onclick="openChat()" onkeydown="if(event.key==='Enter')openChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
 <div class="header-icon" id="notifIcon" style="position:relative;">
 <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
 <span class="badge" id="notifBadge" style="display:none">0</span>
@@ -90,6 +90,7 @@
 <aside class="sidebar-left">
 <a class="nav-item active" id="nav-home" onclick="switchView('home')"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span data-i18n="nav.home">Главная</span></a>
 <a class="nav-item" id="nav-discussions" onclick="switchView('discussions')"><svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg><span data-i18n="nav.discussions">Обсуждения</span></a>
+<a class="nav-item" id="nav-messages" onclick="openChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg><span>Сообщения</span></a>
 <a class="nav-item" id="nav-people" onclick="switchView('people')"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><span>Профили</span></a>
 <a class="nav-item" id="nav-myprojects" onclick="switchView('myprojects')"><svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg><span data-i18n="nav.myprojects">Мои проекты</span><span class="count" id="myProjectsCount">0</span></a>
 <a class="nav-item" id="nav-assets" onclick="switchView('assets')"><svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-5 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4 8h-8v-1c0-1.33 2.67-2 4-2s4 .67 4 2v1z"/></svg><span data-i18n="nav.files">Мои файлы</span></a>
@@ -98,9 +99,7 @@
 <a class="nav-item" id="nav-settings" onclick="switchView('settings')"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg><span data-i18n="nav.settings">Настройки</span></a>
 <a class="nav-item" id="installBtn" style="display:none" onclick="installApp()"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg><span>Установить приложение</span></a>
 <div class="section-label sb-mobile-only">Под рукой</div>
-<a class="nav-item sb-mobile-only" onclick="closeMobileMenu();openChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg><span>Чат</span></a>
 <a class="nav-item sb-mobile-only" onclick="closeMobileMenu();quickLink('help')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 10.9 13 11.5 13 13h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg><span>Помощь и поддержка</span></a>
-<div class="sidebar-footer"><div class="footer-links"><a onclick="switchView('settings')" style="cursor:pointer" data-i18n="nav.settings">Настройки</a> · <a href="#">Помощь и поддержка</a><br><a href="#">О StudHub</a> · <a href="#" onclick="openRules(event)" data-i18n="nav.rules">Правила</a> · <a href="#">Конфиденциальность</a><br>© StudHub, 2026</div></div>
 </aside>
 
 <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeMobileMenu()"></div>
@@ -282,10 +281,19 @@
 
 <aside class="sidebar-right">
 <div class="sidebar-card"><div class="card-header"><div class="card-title">Под рукой</div></div><div class="quick-link" role="button" tabindex="0" onclick="quickLink('help')" onkeydown="sbKey(event,'help')"><div class="quick-link-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div><div class="quick-link-text">Помощь и поддержка</div><div class="quick-link-arrow">›</div></div></div>
-<div class="sidebar-card"><div class="card-header"><div class="card-title">Свои на связи</div><button class="card-link" onclick="openChat()">Открыть чат</button></div><div id="sbOnline"></div></div>
+<div class="sidebar-card"><div class="card-header"><div class="card-title" id="sbFeedTitle">Что нового</div></div><div id="sbFeed"></div></div>
 <div class="rules-card" role="button" tabindex="0" onclick="openRules(event)" onkeydown="if(event.key==='Enter')openRules(event)"><div class="rules-title">Где уважуха — там и движуха</div><div class="rules-text">Уважай собеседников, проверяй источники и не бойся задавать вопросы. Правила StudHub помогают всем чувствовать себя комфортно.</div><div class="rules-link">Правила платформы ↗</div></div>
 </aside>
 </div>
+<footer class="site-footer" id="siteFooter">
+<div class="sf-inner">
+<div class="sf-brand"><div class="sf-logo">Stud<span>Hub</span></div><p>Платформа студенческого краудфандинга: находи проекты однокурсников, поддерживай их рублём и следи за новостями.</p></div>
+<div class="sf-col"><b>Платформа</b><a onclick="switchView('home')">Проекты</a><a onclick="switchView('people')">Профили</a><a onclick="switchView('discussions')">Обсуждения</a></div>
+<div class="sf-col"><b>Авторам</b><a onclick="openCreateModal()">Разместить проект</a><a onclick="switchView('myprojects')">Мои проекты</a><a onclick="switchView('wallet')">Кошелёк</a></div>
+<div class="sf-col"><b>Помощь</b><a onclick="quickLink('help')">Помощь и поддержка</a><a onclick="openRules(event)">Правила платформы</a><a onclick="switchView('settings')">Настройки</a></div>
+</div>
+<div class="sf-bottom"><span>© StudHub, 2026</span><span>Сделано студентами для студентов</span></div>
+</footer>
 
 
 <!-- РАСПИСАНИЕ И ЗАЧЁТЫ -->
@@ -312,14 +320,14 @@
 
 <!-- ЧАТ -->
 <div class="modal-overlay" id="chatModal" onclick="if(event.target===this)closeModal('chatModal')"><div class="modal" style="max-width:760px">
-<div class="modal-header"><div class="modal-title">Чат</div><button class="modal-close" onclick="closeModal('chatModal')">✕</button></div>
+<div class="modal-header"><div class="modal-title">Сообщения</div><button class="modal-close" onclick="closeModal('chatModal')">✕</button></div>
 <div class="sb-chat">
 <div class="sb-chat-side"><div id="chatSearchWrap" style="display:none;padding:2px 2px 8px"><input class="form-input" id="chatSearch" placeholder="Найти студента…" oninput="sbSearchPeople(this.value)" autocomplete="off" style="padding:9px 12px" maxlength="60"><div id="chatFound"></div></div><div id="chatPeople"></div></div>
 <div class="sb-chat-main">
-<div class="sb-chat-head"><b id="chatTitle" onclick="openChatProfile()" title="Открыть профиль"></b><span id="chatSub"></span></div>
+<div class="sb-chat-head"><button type="button" class="sb-back" onclick="sbShowThread(false)" aria-label="Назад к диалогам"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><div class="sb-head-text"><b id="chatTitle" onclick="openChatProfile()" title="Открыть профиль"></b><span id="chatSub"></span></div></div>
 <div class="sb-msgs" id="chatMsgs"></div>
 <div class="sb-note" id="chatNote"></div>
-<div class="sb-chat-input"><input class="form-input" id="chatInput" maxlength="1000" placeholder="Напишите сообщение..." autocomplete="off"><button class="btn-submit" id="chatSend" onclick="sendChatMsg()">Отправить</button></div>
+<div class="sb-chat-input"><input class="form-input" id="chatInput" maxlength="1000" placeholder="Напишите сообщение..." autocomplete="off"><button class="btn-submit sb-send" id="chatSend" onclick="sendChatMsg()" aria-label="Отправить"><svg viewBox="0 0 24 24"><path d="M12 4l8 8-1.41 1.41L13 7.83V20h-2V7.83l-5.59 5.58L4 12z"/></svg></button></div>
 </div>
 </div>
 </div></div>

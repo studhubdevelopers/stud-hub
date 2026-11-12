@@ -73,7 +73,7 @@ async function publishProjectUpdate(id){
   }else{
    const all=JSON.parse(localStorage.getItem(PROJECT_UPDATES_KEY)||'[]');all.unshift({...row,id:'u'+Date.now()});localStorage.setItem(PROJECT_UPDATES_KEY,JSON.stringify(all));
   }
-  renderProjectPage();showToast('Обновление опубликовано','success');
+  renderProjectPage();renderSideFeed();showToast('Обновление опубликовано','success');
  }catch(e){console.error('Дневник проекта: не удалось опубликовать',e);showToast(BACKEND?projectUpdateErrorText(e):'Не удалось сохранить обновление','error')}
 }
 // Понятная причина ошибки публикации: нет таблицы, нет прав, не прошли ограничения длины или сеть.
@@ -121,9 +121,33 @@ function fundingCard(p){
  <div class="funding-actions">${btn}<button class="btn-cancel" onclick="showFundingDetails('${p.id}')">Подробнее</button></div>
  </div></article>`;
 }
+
+/* ===== Правая колонка: что нового в проектах ===== */
+function allProjectUpdates(){
+ if(BACKEND)return PROJECT_UPDATES_CACHE.slice();
+ try{return JSON.parse(localStorage.getItem(PROJECT_UPDATES_KEY)||'[]')}catch(e){return[]}
+}
+function renderSideFeed(){
+ const box=document.getElementById('sbFeed'),ttl=document.getElementById('sbFeedTitle');if(!box)return;
+ const camps=allCampaigns(),byId=new Map(camps.map(c=>[c.id,c]));
+ const ups=allProjectUpdates().filter(x=>byId.has(x.projectId)).sort((a,b)=>b.createdAt-a.createdAt).slice(0,4);
+ const item=(c,l1,l2,tab)=>`<div class="feed-item" role="button" tabindex="0" onclick="showFundingDetails('${c.id}','${tab}')" onkeydown="if(event.key==='Enter')showFundingDetails('${c.id}','${tab}')"><div class="feed-ico">${esc((c.name||'?').trim().charAt(0).toUpperCase())}</div><div class="feed-txt"><b>${esc(l1)}</b><span>${esc(l2)}</span></div></div>`;
+ if(ups.length){
+  if(ttl)ttl.textContent='Что нового';
+  box.innerHTML=ups.map(x=>{const c=byId.get(x.projectId);return item(c,x.title,c.name+' · '+timeAgo(x.createdAt),'news')}).join('');return;
+ }
+ const soon=camps.filter(c=>isOpen(c)&&c.deadline).sort((a,b)=>a.deadline-b.deadline).slice(0,3);
+ if(soon.length){
+  if(ttl)ttl.textContent='Скоро завершатся';
+  box.innerHTML=soon.map(c=>item(c,c.name,daysLeftText(c)+' · '+projectStats(c).pct+'%','about')).join('');return;
+ }
+ if(ttl)ttl.textContent='Что нового';
+ box.innerHTML='<div class="sb-empty" style="padding:12px 4px">Здесь появятся новости проектов: авторы пишут, как идёт работа.</div>';
+}
 function renderFundraisingProjects(){
  const grid=document.getElementById('fundraisingProjectsGrid');
  if(grid){const list=allCampaigns();grid.innerHTML=list.length?list.map(fundingCard).join(''):'<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🚀</div><div class="empty-state-title">Пока нет активных сборов</div><div class="empty-state-desc">Станьте первым — разместите проект и начните собирать поддержку.</div><button class="btn-submit" onclick="openCreateModal()">Разместить проект</button></div>'}
+ renderSideFeed();
  const hs=document.getElementById('homeStats');
  if(hs){const l=allCampaigns(),tot=l.reduce((a,p)=>a+projectStats(p).raised,0),bk=l.reduce((a,p)=>a+projectStats(p).backers,0);hs.innerHTML=l.length?`<div class="home-stat"><b>${l.length}</b><span>проектов</span></div><div class="home-stat"><b>${fmtRub(tot)}</b><span>собрано</span></div><div class="home-stat"><b>${bk}</b><span>поддержек</span></div>`:''}
  if(currentView==='project')renderProjectPage();
